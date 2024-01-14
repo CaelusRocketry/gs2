@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block js %} 
+    {{ block.super }}
+    <script src="{% static 'js/socket.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="data">
+    </div>
+{% endblock %}
