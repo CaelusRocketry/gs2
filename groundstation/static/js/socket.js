@@ -1,4 +1,5 @@
-const socket = new WebSocket('ws://' + window.location.host + '/data/');
+// this is all temporary until frontend is finished
+const socket = new WebSocket('ws://' + window.location.host + '/gnd/');
 
 socket.onmessage = function(e) {
     const data = JSON.parse(e.data);

@@ -1,34 +1,38 @@
 import socket
-import threading
+from time import sleep
+from threading import Thread
 
 from asgiref.sync import async_to_sync
-from channels.consumer import SyncConsumer
+from channels.layers import get_channel_layer
 
-class FSBridge(SyncConsumer):    
+class FSBridge():    
     def __init__(self):
-        listener = threading.Thread(target=self.listen_fssocket, daemon=True)
-        listener.start()
+        self.channel_layer = get_channel_layer()
+        self.startup()
+    
+    def startup(self):
+        listener = Thread(target=self.listen_fssocket, daemon=True)
+        self.listening = True
+        listener.start() 
 
-    def startup(self, message):
-        print("[FS] Starting up bridge...")
-
-    def connect_xbee(self):
+    def listen_xbee(self) -> None:
         # TODO: connect via xbee since socket is only for simulation
         pass
 
-    def listen_fssocket(self):
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    def listen_fssocket(self) -> None:
+        skt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        skt.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-        self.socket.bind(("127.0.0.1", 5005))
+        skt.bind(("127.0.0.1", 5005))
 
-        self.socket.listen(1)
+        skt.listen(1)
 
-        (self.fs, _) = self.socket.accept() # socket connection
+        (self.fs, _) = skt.accept()
 
-        while True:
-            data = self.fs.recv(8192).decode()
+        while self.listening:
+            data: str = self.fs.recv(8192).decode()
             async_to_sync(self.channel_layer.group_send)("ground-station", {
                 "type": "flight.data",
                 "data": data
-            })            
+            })
+            sleep(0.1)
