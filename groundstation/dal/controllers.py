@@ -18,7 +18,7 @@ class SimulationController():
 
         self.socket.bind((self.host, self.port))
 
-    def thread(self): 
+    def thread(self) -> None: 
         self.socket.listen(1)
         (self.fs, _) = self.socket.accept() # addr doesn't matter
 

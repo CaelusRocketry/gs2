@@ -2,13 +2,13 @@ import json
 from os import path, getcwd
 from threading import Thread
 
+from groundstation import settings
+
 from .controllers import XBeeController, SimulationController
 
 class FSBridge():    
     def __init__(self):
-        self.config: dict | None = None
-        with open(path.join(getcwd(), "conf", "config.json"), "r") as conf:
-            self.config = json.load(conf)
+        self.config: dict | None = settings.CONFIG
          
         self.controller: XBeeController | SimulationController | None = None
         if self.config["environment"] == "xbee":

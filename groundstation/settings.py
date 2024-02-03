@@ -10,8 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import json
 import os
+from jsonschema import validate, Draft202012Validator
 from pathlib import Path
+
+from conf.schema import CONFIG_SCHEMA
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -138,3 +142,14 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ground station specific
+
+SKIP_CONF_CHECKS: bool = True
+SKIP_PACKET_CHECKS: bool = True
+
+with open(os.path.join(os.getcwd(), "conf", "config.json"), "r") as conf:
+    CONFIG = json.load(conf)
+
+if not SKIP_CONF_CHECKS:
+    validate(instance=CONFIG, schema=CONFIG_SCHEMA, format_checker=Draft202012Validator.FORMAT_CHECKER)
