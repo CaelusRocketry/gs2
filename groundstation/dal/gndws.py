@@ -1,6 +1,8 @@
 from channels.generic.websocket import JsonWebsocketConsumer
 from groundstation.dal.fsbridge import FSBridge
 
+from .packet import Packet
+
 class GroundConsumer(JsonWebsocketConsumer):
     fsbridge = FSBridge()
     groups = ["ground-station"]
@@ -12,18 +14,5 @@ class GroundConsumer(JsonWebsocketConsumer):
         self.send_json(content)
     
     def flight_data(self, message):
-        packet = message['data']
-        packet = packet[1:-1] # remove ^ & $
-        content = self.parse_packet(packet)
-        self.send_json(content)
-        
-    def parse_packet(self, packet):
-        tokens = packet.split("|")
-        header = tokens[0]
-        message = tokens[2]
-
-        return {
-            "header": header,
-            "message": message
-        }
-
+        packet = Packet(message["data"])
+        self.send_json(packet.parse())

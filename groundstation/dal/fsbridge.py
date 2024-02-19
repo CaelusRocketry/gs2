@@ -1,5 +1,3 @@
-import json
-from os import path, getcwd
 from threading import Thread
 
 from groundstation import settings
