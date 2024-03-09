@@ -6,7 +6,7 @@ from django.urls import path
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "groundstation.settings")
 
-from groundstation.dal.gndws import GroundConsumer
+from groundstation.dashboard.consumers import GroundConsumer
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),

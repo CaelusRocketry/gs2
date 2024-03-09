@@ -1,7 +1,7 @@
 from channels.generic.websocket import JsonWebsocketConsumer
-from groundstation.dal.fsbridge import FSBridge
 
-from .packet import Packet
+from ..dal.fsbridge import FSBridge
+from ..dal.packet import Packet
 
 class GroundConsumer(JsonWebsocketConsumer):
     fsbridge = FSBridge()

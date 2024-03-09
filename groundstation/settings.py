@@ -21,7 +21,7 @@ from conf.schema import CONFIG_SCHEMA
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 PROD = os.getenv("PROD", "FALSE").upper() == "TRUE"
-DEBUG = os.getenv("DEBUG", "FALSE").upper() == "TRUE"
+DEBUG = True#os.getenv("DEBUG", "FALSE").upper() == "TRUE"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     # pkg
-    'daphne',
+    'groundstation.daphne',
     'channels',
     # local
     'groundstation.dashboard',
@@ -145,11 +145,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ground station specific
 
-SKIP_CONF_CHECKS: bool = True
+SKIP_CONF_CHECKS: bool = False
 SKIP_PACKET_CHECKS: bool = True
 
 with open(os.path.join(os.getcwd(), "conf", "config.json"), "r") as conf:
     CONFIG = json.load(conf)
-
-if not SKIP_CONF_CHECKS:
-    validate(instance=CONFIG, schema=CONFIG_SCHEMA, format_checker=Draft202012Validator.FORMAT_CHECKER)
