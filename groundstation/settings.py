@@ -12,16 +12,13 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import json
 import os
-from jsonschema import validate, Draft202012Validator
 from pathlib import Path
-
-from conf.schema import CONFIG_SCHEMA
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 PROD = os.getenv("PROD", "FALSE").upper() == "TRUE"
-DEBUG = True#os.getenv("DEBUG", "FALSE").upper() == "TRUE"
+DEBUG = os.getenv("DEBUG", "FALSE").upper() == "TRUE"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -36,7 +33,6 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     # pkg
-    'groundstation.daphne',
     'channels',
     # local
     'groundstation.dashboard',
@@ -57,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_htmx.middleware.HtmxMiddleware'
 ]
 
 CHANNEL_LAYERS = {
@@ -142,11 +139,3 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# ground station specific
-
-SKIP_CONF_CHECKS: bool = False
-SKIP_PACKET_CHECKS: bool = True
-
-with open(os.path.join(os.getcwd(), "conf", "config.json"), "r") as conf:
-    CONFIG = json.load(conf)

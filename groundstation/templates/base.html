@@ -1,27 +1,22 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        {% block title %}
+        { % block title %}
         {% endblock %}
+        / Caelus Rocketry
     </title>
-
-    {% block meta %}
-    {% endblock %}
-
-    {% block css %}
-    {% endblock %}
-
-    {% block js %}
-    {% endblock %}
-
-    {% block head %}
-    {% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f62b24">
+    <meta name="description" content="Caelus Rocketry Ground Station">
 </head>
 <body>
-    {% block body %}
+    {% block content %}
     {% endblock %}
 </body>
 </html>
