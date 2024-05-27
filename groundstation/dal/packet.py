@@ -1,5 +1,6 @@
 from groundstation import settings
 
+
 class Packet:
     PACKET_START: str = "^"
     PACKET_DELIMITER: str = "|"
@@ -7,7 +8,7 @@ class Packet:
 
     STAGE_DELIMITER: str = "-"
     DATA_DELIMITER: str = ","
-    
+
     def __init__(self, raw="", header="", data="", timestamp=None):
         if raw:
             self.unpack(raw)
@@ -32,9 +33,7 @@ class Packet:
         response: dict = {
             "header": header_name,
             "timestamp": self.timestamp,
-            "payload": {
-                "type": header_type
-            }
+            "payload": {"type": header_type},
         }
 
         if header == "DAT":
@@ -44,12 +43,16 @@ class Packet:
         elif header == "SGP":
             stage_data: list[str] = self.data.split(self.STAGE_DELIMITER)
             if stage_data[1] == "1":
-                response["payload"]["message"] = f"progressed_{self.get_stage_name(stage_data[0], 0)}"
+                response["payload"][
+                    "message"
+                ] = f"progressed_{self.get_stage_name(stage_data[0], 0)}"
         elif header == "SGD":
             response["payload"]["stage"] = self.get_stage_name(self.data, 0)
             response["payload"]["status"] = int(self.data[1:])
         elif header == "SPQ":
-            response["payload"]["message"] = f"permission_to_progress_{self.get_stage_name(self.data, 1)}"
+            response["payload"][
+                "message"
+            ] = f"permission_to_progress_{self.get_stage_name(self.data, 1)}"
         elif header == "HRT":
             response["payload"]["message"] = "ok"
         elif header == "SAB":
@@ -63,7 +66,7 @@ class Packet:
 
     def parse_sensors(self, response: dict):
         sensors: list[str] = self.data.split(self.DATA_DELIMITER)
-            
+
         for sensor in sensors:
             sensor_type, sensor_location = self.get_sensor_data(sensor)
             value = int(sensor[2:], 16)
@@ -77,8 +80,8 @@ class Packet:
                 # slope and bias values should be calibrated
                 slope = float(settings.CONFIG["sensors"]["pressure"][sensor_location]["slope"])
                 bias = float(settings.CONFIG["sensors"]["pressure"][sensor_location]["bias"])
-                value = slope * value + bias # adjust to y=mx+b
-            
+                value = slope * value + bias  # adjust to y=mx+b
+
             response["payload"][sensor_type][sensor_location]["value"] = value
 
     def parse_valves(self, response: dict):
@@ -90,7 +93,7 @@ class Packet:
 
             if not valve_type in response["payload"]:
                 response["payload"][valve_type] = {}
-            
+
             response["payload"][valve_type][valve_location] = state
 
     def get_header_name(self):
@@ -107,7 +110,7 @@ class Packet:
             "SGP": "stage_progress",
             "SPQ": "response",
             "SGD": "stage",
-            "INF": "response"
+            "INF": "response",
         }
 
         return name_mapping[self.header]
@@ -126,27 +129,23 @@ class Packet:
             "SGP": "stage_progression",
             "SPQ": "stage_progression_request",
             "SGD": "stage_data",
-            "INF": "info"
+            "INF": "info",
         }
 
         return type_mapping[self.header]
 
     def get_sensor_data(self, sensor: str):
-        type_mapping: dict = {
-            "0": "thermocouple", 
-            "1": "pressure", 
-            "2": "load"
-        }
+        type_mapping: dict = {"0": "thermocouple", "1": "pressure", "2": "load"}
 
         location_mapping: dict = {
-            "1": "PT-1", 
-            "2": "PT-2", 
-            "3": "PT-3", 
-            "4": "PT-4", 
-            "5": "PT-5", 
-            "P": "PT-6", 
-            "7": "PT-7", 
-            "8": "PT-8", 
+            "1": "PT-1",
+            "2": "PT-2",
+            "3": "PT-3",
+            "4": "PT-4",
+            "5": "PT-5",
+            "P": "PT-6",
+            "7": "PT-7",
+            "8": "PT-8",
             "9": "TC-1",
             "A": "TC-2",
             "B": "TC-3",
@@ -160,17 +159,15 @@ class Packet:
 
     def get_valve_data(self, valve: str):
         # in case there will be more than 1 type
-        type_mapping: dict = {
-            "0": "solenoid"
-        }
-        
+        type_mapping: dict = {"0": "solenoid"}
+
         location_mapping: dict = {
             "1": "ethanol_pressurization",
             "2": "ethanol_vent",
             "3": "ethanol_mpv",
             "4": "nitrous_pressurization",
             "5": "nitrous_fill",
-            "6": "nitrous_mpv"
+            "6": "nitrous_mpv",
         }
 
         return (type_mapping[valve[0]], location_mapping[valve[1]])
