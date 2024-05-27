@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "gs2"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^5.0.6"
+channels = "^4.1.0"
+daphne = "^4.1.2"
+django-htmx = "^1.17.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
