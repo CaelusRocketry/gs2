@@ -1,0 +1,43 @@
+:root {
+    --space-black: #19191b;
+    --space-black-offset: #1c1c1d;
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    padding: 0;
+    height: 100%;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+#main-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+#content {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    flex: 1;
+    overflow: auto;
+}
+
+.header {
+    text-align: center;
+    background-color: var(--space-black-offset);
+    color: white;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: 300;
+    line-height: 2.5em;
+}
+
+.header > h3 {
+    font-weight: inherit;    
+}

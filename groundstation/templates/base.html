@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>
-        { % block title %}
+        {% block title %}
         {% endblock %}
         / Caelus Rocketry
     </title>
@@ -14,9 +14,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f62b24">
     <meta name="description" content="Caelus Rocketry Ground Station">
+    <link rel="icon" href="{% static 'img/favicon.ico' %}">
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="{% static 'css/nav.css' %}">
+    {% endblock %}
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+    <div id="main-container">
+        {% include "nav.html" %}
+        <main id="content">
+            {% include "header.html" %}
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
 </body>
 </html>
