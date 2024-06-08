@@ -1,4 +1,5 @@
 import socket
+import serial
 from time import sleep
 
 from channels.layers import get_channel_layer
@@ -31,13 +32,34 @@ class SimulationController():
                 "data": data
             })
             sleep(self.delay)
+    
+    def send_data(self, message: str) -> None:
+        self.fs.send(message)
 
 class XBeeController():
     def __init__(self, config: dict):
         self.config = config
+        self.channel_layer = get_channel_layer()
         self.baud = self.config["telemetry"]["xbee"]["baudrate"]
         self.port = self.config["telemetry"]["xbee"]["port"]
-
+        self.delay = self.config["telemetry"]["xbee"]["delay"]
+        
+        # we use serial here instead of digi-xbee since the latter only   
+        # works with API mode and it would be much simpler to use AT mode
+        self.xbee = serial.Serial(self.port, self.baud)
+        self.xbee.reset_input_buffer()
+        
     def thread(self) -> None:
-        pass
+        self.listening = True
 
+        while self.listening:
+            data: str = self.xbee.read(self.xbee.in_waiting).decode()
+            async_to_sync(self.channel_layer.group_send)("ground-station", {
+                "type": "flight.data",
+                "data": data
+            })
+            sleep(self.delay)
+
+    def send_data(self, message: str) -> None:
+        # TODO: possibly thread this
+        self.xbee.write(message.encode())

@@ -1,5 +1,5 @@
 {
-    "environment": "simulation",
+    "environment": "xbee",
     "telemetry": {
         "sim": {
             "host": "127.0.0.1",
@@ -8,7 +8,7 @@
             "delay": 0.1
         },
         "xbee": {
-            "port": "/dev/ttyUSB0",
+            "port": "COM1",
             "baudrate": 9600
         }
     }
