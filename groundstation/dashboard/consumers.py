@@ -9,12 +9,10 @@ class GroundConsumer(JsonWebsocketConsumer):
 
     def connect(self):
         self.accept()
-
+        
     def receive_json(self, content):
         self.send_json(content)
     
     def flight_data(self, message):
         packet = Packet(message["data"])
         self.send_json(packet.parse())
-
-        # TODO: store data every <0.1 seconds in database

@@ -17,8 +17,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-PROD = os.getenv("PROD", "FALSE").upper() == "TRUE"
-DEBUG = True#os.getenv("DEBUG", "FALSE").upper() == "TRUE"
+PROD = os.getenv('PROD', 'FALSE').upper() == 'TRUE'
+DEBUG = True # os.getenv('DEBUG', 'FALSE').upper() == 'TRUE'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -27,12 +27,13 @@ DEBUG = True#os.getenv("DEBUG", "FALSE").upper() == "TRUE"
 if not PROD:
     SECRET_KEY = 'lhwk#mt*_mu82ld(s@cjgwku#mv^x%3gzb+mz!dy6%jmubg&rp'
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definition
 
 INSTALLED_APPS = [
     # pkg
+    'daphne',
     'channels',
     # local
     'groundstation.dashboard',
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'groundstation.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "groundstation", "templates")],
+        'DIRS': [os.path.join(BASE_DIR, 'groundstation', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,7 +80,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = "groundstation.asgi.application"
+ASGI_APPLICATION = 'groundstation.asgi.application'
 WSGI_APPLICATION = 'groundstation.wsgi.application'
 
 
@@ -131,7 +132,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "groundstation", "static")
+    os.path.join(BASE_DIR, 'groundstation', 'static')
 ]
 
 # Default primary key field type
@@ -139,5 +140,7 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-with open(os.path.join(os.getcwd(), "groundstation", "config.json"), "r") as conf:
+# load config
+
+with open(os.path.join(os.getcwd(), 'groundstation', 'config.json'), 'r') as conf:
     CONFIG = json.load(conf)
