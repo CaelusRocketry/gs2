@@ -1,5 +1,5 @@
 {
-    "environment": "simulation",
+    "environment": "sim",
     "telemetry": {
         "sim": {
             "host": "127.0.0.1",
@@ -9,7 +9,7 @@
             "store": "parsed"
         },
         "xbee": {
-            "port": "COM1",
+            "port": "COM5",
             "baudrate": 9600,
             "delay": 0.1,
             "store": "parsed"
