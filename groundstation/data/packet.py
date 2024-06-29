@@ -4,7 +4,7 @@ class Packet:
     PACKET_END: str = '$'
 
     DATA_DELIMITER: str = ','
-    
+
     def __init__(self, packed_pkt: str):
         # packed format: ^header|timestamp|data$
         self.unpack(packed_pkt)
@@ -14,7 +14,7 @@ class Packet:
         tokens: list[str] = packet.split(self.PACKET_DELIMITER)
         self.header: str = tokens[0]
         self.data: str = tokens[2]
-        # timestamp in this format to conform with old simulation software 
+        # timestamp in this format to conform with old simulation software
         self.timestamp: float = int(tokens[1], base=16) / 1000.0
 
     def parse(self):
@@ -31,17 +31,17 @@ class Packet:
             self.parse_sensors(response)
         elif header == 'VAL':
             self.parse_valves(response)
-        
+
         return response
 
     def parse_sensors(self, response: dict):
         sensors: list[str] = self.data.split(self.DATA_DELIMITER)
-            
+
         for sensor in sensors:
             sensor_type, sensor_location = self.get_sensor_data(sensor)
             value = int(sensor[2:], 16)
 
-            if not sensor_type in response['payload']:
+            if sensor_type not in response['payload']:
                 response['payload'][sensor_type] = {}
 
             response['payload'][sensor_type][sensor_location] = value
@@ -53,9 +53,9 @@ class Packet:
             valve_type, valve_location = self.get_valve_data(valve)
             state = int(valve[2])
 
-            if not valve_type in response['payload']:
+            if valve_type not in response['payload']:
                 response['payload'][valve_type] = {}
-            
+
             response['payload'][valve_type][valve_location] = state
 
     def get_header_name(self):
@@ -92,20 +92,20 @@ class Packet:
         type_mapping: dict = {
             "0": "solenoid"
         }
-        
+
         # subject to change
         location_mapping: dict = {
-            '1': 'SV-1', # ethanol_ground_vent
-            '2': 'SV-2', # nitrous_vent
-            '3': 'SV-3', # ethanol_pressurization
-            '4': 'SV-4', # nitrous_pressurization
-            '5': 'SV-5', # ethanol_flight_vent
-            '6': 'SV-6', # nitrous_flight_vent
-            '7': 'SV-7', # ethanol_drain
-            '8': 'SV-8', # nitrous_drain
-            '9': 'SV-9', # ethanol_mpv
-            '10': 'SV-10', # nitrous_mpv
-            '11': 'SV-11' # nitrous_isolation
+            "1": "SV-1",  # ethanol_ground_vent
+            "2": "SV-2",  # nitrous_vent
+            "3": "SV-3",  # ethanol_pressurization
+            "4": "SV-4",  # nitrous_pressurization
+            "5": "SV-5",  # ethanol_flight_vent
+            "6": "SV-6",  # nitrous_flight_vent
+            "7": "SV-7",  # ethanol_drain
+            "8": "SV-8",  # nitrous_drain
+            "9": "SV-9",  # ethanol_mpv
+            "10": "SV-10",  # nitrous_mpv
+            "11": "SV-11",  # nitrous_isolation
         }
 
         return (type_mapping[valve[0]], location_mapping[valve[1]])

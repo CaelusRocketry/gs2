@@ -30,11 +30,10 @@ class Controller:
         )
 
     def create_test(self):
-        test_id = f"{self.config['environment']}-{''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=8))}"
-        current_test = Test(test_id=test_id)
+        current_test = Test.objects.create()
         current_test.save()
-        
         return current_test
+
 
 class SimulationController(Controller):
     def __init__(self, config: dict):
@@ -54,12 +53,13 @@ class SimulationController(Controller):
 
     def listen(self) -> None: 
         self.socket.listen(1)
-        (self.fs, _) = self.socket.accept() # addr doesn't matter
-
+        self.fs, _ = self.socket.accept()  # addr doesn't matter
+        print(self.fs)
         self.listening = True
 
         while self.listening:
             data: str = self.fs.recv(self.bufsize).decode()
+            print(data)
 
             if not self.current_test:
                 self.current_test = self.create_test()
@@ -92,7 +92,7 @@ class XBeeController(Controller):
         while self.listening:
             msg: XBeeMessage = self.xbee.read_data()
 
-            if not msg is None:
+            if msg is not None:
                 data = msg.data.decode()
 
                 if not self.current_test:

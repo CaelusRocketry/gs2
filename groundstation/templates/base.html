@@ -8,26 +8,26 @@
     <title>
         {% block title %}
         {% endblock %}
-        / Caelus Rocketry
+        - Caelus Groundstation
     </title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f62b24">
     <meta name="description" content="Caelus Rocketry Ground Station">
     <link rel="icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% block css %}
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <link rel="stylesheet" href="{% static 'css/nav.css' %}">
     {% endblock %}
 </head>
 <body>
-    <div id="main-container">
-        {% include "nav.html" %}
-        <main id="content">
-            {% include "header.html" %}
-            {% block content %}
-            {% endblock %}
-        </main>
-    </div>
+    {% include "nav.html" %}
+    <main id="content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    {% block js %}
+    {% endblock %}
 </body>
 </html>
