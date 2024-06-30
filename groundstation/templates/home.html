@@ -1,13 +1,25 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-{% block title %}Home{% endblock%}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div class="center">
+    {% with sensors=sensors %} 
+        {% include "sidebar.html" %}
+    {% endwith %}
+    <div>
         <object class="pid" data="{% static 'img/pid/full-water.svg' %}"></object>
     </div>
 {% endblock %}
 
 {% block js %}
+    {{ block.super }}
     <script src="{% static 'js/pid.js' %}"></script>
 {% endblock %}
