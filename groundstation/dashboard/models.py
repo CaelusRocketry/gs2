@@ -5,7 +5,7 @@ class Test(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return "{} - ran on {}".format(self.test_id, self.created_at)
+        return "Test ran on {}".format(self.created_at)
 
     class Meta:
         ordering = ["-created_at"]

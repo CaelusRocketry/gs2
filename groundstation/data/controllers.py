@@ -54,13 +54,12 @@ class SimulationController(Controller):
     def listen(self) -> None: 
         self.socket.listen(1)
         self.fs, _ = self.socket.accept()  # addr doesn't matter
-        print(self.fs)
+        
         self.listening = True
 
         while self.listening:
             data: str = self.fs.recv(self.bufsize).decode()
-            print(data)
-
+            
             if not self.current_test:
                 self.current_test = self.create_test()
             self.store_packet(data, self.current_test)
