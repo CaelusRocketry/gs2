@@ -14,10 +14,5 @@
             "delay": 0.1,
             "store": "parsed"
         }
-    },
-    "sensors": {
-        "pressure": ["PT-1", "PT-2", "PT-3", "PT-4"],
-        "load": ["LC-1", "LC-2", "LC-3"],
-        "thermocouple": ["TC-1"]
     }
 }

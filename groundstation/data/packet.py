@@ -1,5 +1,3 @@
-from groundstation import settings
-
 class Packet:
     PACKET_START: str = '^'
     PACKET_DELIMITER: str = '|'
@@ -8,7 +6,6 @@ class Packet:
     DATA_DELIMITER: str = ','
 
     def __init__(self, packed_pkt: str):
-        self.sensor_mapping = self.store_sensor_mappings()
         # packed format: ^header|timestamp|data$
         self.unpack(packed_pkt)
 
@@ -75,8 +72,22 @@ class Packet:
             '1': 'pressure', 
             '2': 'load'
         }
+
+        # subject to change
+        location_mapping: dict = {
+            '1': 'PT-1', 
+            '2': 'PT-2', 
+            '3': 'PT-3', 
+            '4': 'PT-4', 
+            '5': 'TC-1',
+            '6': 'LC-1',
+            '7': 'LC-2',
+            '8': 'LC-3',
+            'P': 'TC-1',
+            '9': 'TC-1',
+        }
         
-        return (type_mapping[sensor[0]], self.sensor_mapping[sensor[1]])
+        return (type_mapping[sensor[0]], location_mapping[sensor[1]])
 
     def get_valve_data(self, valve: str):
         # in case there will be more than 1 type
@@ -100,17 +111,6 @@ class Packet:
         }
 
         return (type_mapping[valve[0]], location_mapping[valve[1]])
-
-    def store_sensor_mappings(self):
-        n = 1
-        location_mapping: dict = {}
-        
-        for sensor_type in ["pressure", "load", "thermocouple"]:
-            for sensor in settings.CONFIG["sensors"][sensor_type]:
-                location_mapping[str(n)] = sensor
-                n += 1
-
-        return location_mapping
 
     def __str__(self):
         return f"{self.PACKET_START}{self.header}{self.PACKET_DELIMITER}{self.timestamp}{self.PACKET_DELIMITER}{self.data}{self.PACKET_END}"
