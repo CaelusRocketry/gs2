@@ -1,4 +1,4 @@
-let data = {
+let pidBlocks = {
     "PT-1": null,
     "PT-2": null,
     "PT-3": null,
@@ -7,38 +7,75 @@ let data = {
     "LC-1": null,
     "LC-2": null,
     "LC-3": null,
-}
+};
 
-function initializePID() {
-    let divs = $("object.pid").contents().find("div > div > div");
-    for (let i = 0; i < divs.length; i++) {
-        text = $(divs[i]).text();
+let sidebarBlocks = {
+    "PT-1": null,
+    "PT-2": null,
+    "PT-3": null,
+    "PT-4": null,
+    "TC-1": null,
+    "LC-1": null,
+    "LC-2": null,
+    "LC-3": null,
+};
+
+function pidInit() {
+    let blocks = $("object.pid").contents().find("div > div > div");
+    
+    blocks.each(function() {
+        let text = $(this).text();
+    
         if (text.startsWith("DATA")) {
-            let identifier = text.split(" ")[1];
-            data[identifier] = divs[i];
-            $(divs[i]).css({
-                color: "red",
-                fontWeight: "bold",
-                fontSize: "18px",
-            })
+            let id = text.substring(5);
+            pidBlocks[id] = this;
+            $(this).css("font-size", "18px");
         }
-    }
-    console.log(data);
+    });
 }
 
-function updatePID(identifier, value) {
-    if (data[identifier] != null) {
-        let unit = "PSI";
-        if (identifier.startsWith("LC")) 
-            unit = "N";
-        else if (identifier.startsWith("TC"))
-            unit = "°F";
-        $(data[identifier]).text(value + " " + unit);
-    }
+function sidebarInit() {
+    $("#sidebar div > ul li .data-value").each(function() {
+        let id = this.id;
+        sidebarBlocks[id] = this;
+    })
+}
+
+function updateData(id, value) {
+    if (pidBlocks[id] == null || sidebarBlocks[id] == null) return;
+
+    let unit = "PSI";
+    if (id.startsWith("LC"))
+        unit = "N";
+    else if (id.startsWith("TC"))
+        unit = "°F";
+
+    $([pidBlocks[id], sidebarBlocks[id]]).text(`${value} ${unit}`);
 }
 
 $(function() {
-    setTimeout(function() {
-        initializePID();
-    }, 100);
+    pidInit();
+    sidebarInit();
+
+    let socket = new WebSocket(`ws://${window.location.host}/data/`);
+
+    socket.onmessage = (event) => {
+        let data = JSON.parse(event.data);
+        
+        let header = data.header;
+        let payload = data.payload;
+
+        switch (header) {
+            case "sensor_data":
+                for (const sensor_type of ["pressure", "load", "thermocouple"]) {
+                    $.each(payload[sensor_type], function(id, value) {
+                        updateData(id, value);
+                    });
+                } 
+                break;
+            case "valve_data":
+                // TODO: finish valve updating once valve data can be read
+                break;
+        }
+    }
 });

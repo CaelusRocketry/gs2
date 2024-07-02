@@ -39,6 +39,10 @@
     color: var(--theme-color);
 }
 
+#sidebar span.data-value {
+    color: green;
+}
+
 #sidebar > div:not(:last-child) {
     margin-bottom: 2.5rem;
 }
