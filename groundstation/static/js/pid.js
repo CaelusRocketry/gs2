@@ -35,10 +35,10 @@ function pidInit() {
 }
 
 function sidebarInit() {
-    $("#sidebar div > ul li .data-value").each(function() {
+    $(".data-value").each(function() {
         let id = this.id;
         sidebarBlocks[id] = this;
-    })
+    });
 }
 
 function updateData(id, value) {
@@ -53,7 +53,7 @@ function updateData(id, value) {
     $([pidBlocks[id], sidebarBlocks[id]]).text(`${value} ${unit}`);
 }
 
-$(function() {
+$(window).on("load", function() {
     pidInit();
     sidebarInit();
 
