@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    Tests
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/tests.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div id="test-list">
+        {% if test_list %}
+            {% for test in test_list %}
+                <div class="test-item" id="test-{{ test.pk }}">
+                    <div class="test-metadata">
+                        <div class="test-title">
+                            <h3>#{{ test.pk }}</h3> <span>Test-{{ test.created_at|date:"M-y" }}</span>
+                        </div>
+                        <div class="test-attribs">
+                            <span>Ran on {{ test.created_at|date:"d-m-Y, P" }}</span>
+                            <span>{{ test.packets.count }} Packets</span>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="export-btn action-btn" disabled>
+                            Export
+                        </button>
+                        <button class="replay-btn action-btn" disabled>
+                            Replay
+                        </button>
+                        <button class="delete-btn action-btn">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <span id="no-items">No tests found.</span>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/tests.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,106 @@
+#content {
+    display: flex;
+    height: calc(100% - 50px);
+    width: 100%;
+    flex-direction: column;
+}
+
+#test-list {
+    width: 100%;
+    flex: 1;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    padding: 1em 2.5em;
+}
+
+.test-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1em 2.5em;
+    background-color: #ffffff;
+    border-bottom: 1px solid #757575;
+}
+
+.test-metadata {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    margin-right: 2em;
+}
+
+.test-attribs span {
+    display: block;
+    text-align: end;
+    font-size: .75em;
+    font-family: "Segoe UI", sans-serif;
+    color: #808080;
+}
+
+.action-btn:not(:last-child) {
+    margin-right: .5em;
+}
+
+.action-btn {
+    font-family: "Segoe UI", sans-serif;
+    font-size: .95em;
+    border: none;
+    border-radius: 3px;
+    color: #ffffff;
+    cursor: pointer;
+    text-align: center;
+    padding: .6em 1.2em;
+}
+
+.action-btn:disabled {
+    cursor: not-allowed;
+}
+
+.action-btn:hover {
+    transform: scale(1.04);
+}
+
+.delete-btn {
+    background-color: var(--red);
+}
+
+.delete-btn:hover {
+    background-color: var(--red-dark);
+}
+
+.delete-btn:active {
+    background-color: var(--red-darker);
+}
+
+.export-btn {
+    background-color: var(--green);
+}
+
+.export-btn:hover {
+    background-color: var(--green-dark);
+}
+
+.export-btn:active {
+    background-color: var(--green-darker);
+}
+
+.replay-btn {
+    background-color: var(--gray);
+}
+
+.replay-btn:hover {
+    background-color: var(--gray-dark);
+}
+
+.replay-btn:active {
+    background-color: var(--gray-darker);
+}
+
+#no-items {
+    text-align: center;
+    width: 100%;
+    font-family: "Segoe UI", sans-serif;
+    color: var(--gray-dark);
+}
