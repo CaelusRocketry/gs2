@@ -3,6 +3,18 @@
 :root {
     --theme-color: #f62b24;
     --accent-color: #321635;
+    
+    --red: #f13d37;
+    --red-dark: #d3332e;
+    --red-darker: #b32823;
+
+    --green: #6ed46e;
+    --green-dark: #51bd51;
+    --green-darker: #389738;
+    
+    --gray: #a3a3a3;
+    --gray-dark: #807e7e;
+    --gray-darker: #5e5c5c;
 }
 
 /* reset */
@@ -14,6 +26,14 @@
 a {
     text-decoration: none;
     color: white;
+}
+
+html {
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 
 body {
@@ -51,4 +71,82 @@ nav > img.logo {
     height: 50px;
     width: 50px;
     margin-left: 15px;
+}
+
+#dialog-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: none;
+    border-radius: 5px;
+    width: 30em;
+    font-family: "Segoe UI", sans-serif;
+    overflow: hidden;
+}
+
+#dialog-box::backdrop {
+    background-color: rgba(20, 20, 20, 0.25);
+}
+
+#dialog-box > * {
+    padding: 1em;
+}
+
+#dialog-header {
+    background-color: #eeeeee;
+}
+
+#dialog-header h3 {
+    font-weight: 600;
+}
+
+#dialog-body {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+#dialog-actions {
+    border-top: 1px solid #b8b8b8;
+    margin-left: .5em;
+    margin-right: .5em;
+    display: flex;
+    justify-content: end;
+}
+
+#dialog-actions button {
+    font-family: "Segoe UI", sans-serif;
+    padding: .75em 1.5em;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: .95em;
+}
+
+#dialog-actions button:not(:last-child) {
+    margin-right: 1em;
+}
+
+#dialog-btn-yes {
+    background-color: var(--red);
+}
+
+#dialog-btn-yes:hover {
+    background-color: var(--red-dark);
+}
+
+#dialog-btn-yes:active {
+    background-color: var(--red-darker);
+}
+
+#dialog-btn-no {
+    background-color: var(--gray);
+}
+
+#dialog-btn-no:hover {
+    background-color: var(--gray-dark);
+}
+
+#dialog-btn-no:active {
+    background-color: var(--gray-darker);
 }

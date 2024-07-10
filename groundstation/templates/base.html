@@ -30,11 +30,33 @@
         </main>
     </div>
     
+    <dialog id="dialog-box">
+        <div id="dialog-header">
+            <h3></h3>
+        </div>
+        <div id="dialog-body">
+            <span></span>
+        </div>
+        <div id="dialog-actions">
+            <button id="dialog-btn-yes" class="dialog-btn">
+                Confirm
+            </button>
+            <button id="dialog-btn-no" class="dialog-btn">
+                Cancel
+            </button>
+        </div>
+    </dialog>
+
     {% block js %}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
             crossorigin="anonymous">
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"
+            integrity="sha256-WCzAhd2P6gRJF9Hv3oOOd+hFJi/QJbv+Azn4CGB8gfY=" 
+            crossorigin="anonymous">
+        </script>
+        <script src="{% static 'js/common.js' %}"></script>
     {% endblock %}
 </body>
 </html>
