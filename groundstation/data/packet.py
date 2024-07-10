@@ -40,7 +40,7 @@ class Packet:
         for sensor in sensors:
             sensor_type, sensor_location = self.get_sensor_data(sensor)
             value = int(sensor[2:], 16)
-
+            
             if sensor_type not in response['payload']:
                 response['payload'][sensor_type] = {}
 
@@ -82,9 +82,7 @@ class Packet:
             '5': 'TC-1',
             '6': 'LC-1',
             '7': 'LC-2',
-            '8': 'LC-3',
-            'P': 'TC-1',
-            '9': 'TC-1',
+            '8': 'LC-3'
         }
         
         return (type_mapping[sensor[0]], location_mapping[sensor[1]])
@@ -106,8 +104,8 @@ class Packet:
             "7": "SV-7",  # ethanol_drain
             "8": "SV-8",  # nitrous_drain
             "9": "SV-9",  # ethanol_mpv
-            "10": "SV-10",  # nitrous_mpv
-            "11": "SV-11",  # nitrous_isolation
+            "A": "SV-10",  # nitrous_mpv
+            "B": "SV-11",  # nitrous_isolation
         }
 
         return (type_mapping[valve[0]], location_mapping[valve[1]])
