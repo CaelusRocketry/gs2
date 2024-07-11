@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
 from .models import Test
 
 def index(request):
@@ -28,13 +28,12 @@ def delete_test(request, pk):
     test.delete()    
     return JsonResponse({"success": True})
 
-@require_GET
 def export_test(request, pk):
     test = get_object_or_404(Test, pk=pk)
 
     def stream():
         yield "Caelus Rocketry Ground Software\n"
-        yield f"Test #{pk}, ran on {test.created_at.strftime('%d %b, %Y')}\n---\n"
+        yield f"Test #{pk}, ran on {test.created_at}\n---\n"
         for packet in test.packets.all():
             yield f"{packet.values}\n"
 
