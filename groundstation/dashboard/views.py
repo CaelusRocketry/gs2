@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import Http404, JsonResponse
+from django.http import JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.http import require_GET, require_POST
 from .models import Test
 
 def index(request):
@@ -21,9 +22,23 @@ def tests(request):
     }
     return render(request, "tests.html", ctx)
 
+@require_POST
 def delete_test(request, pk):
-    if request.method == "POST":
-        test = get_object_or_404(Test, pk=pk)
-        test.delete()    
-        return JsonResponse({"success": True})
-    raise Http404
+    test = get_object_or_404(Test, pk=pk)
+    test.delete()    
+    return JsonResponse({"success": True})
+
+@require_GET
+def export_test(request, pk):
+    test = get_object_or_404(Test, pk=pk)
+
+    def stream():
+        yield "Caelus Rocketry Ground Software\n"
+        yield f"Test #{pk}, ran on {test.created_at.strftime('%d %b, %Y')}\n---\n"
+        for packet in test.packets.all():
+            yield f"{packet.values}\n"
+
+    response = StreamingHttpResponse(stream(), content_type="text/plain")
+    response["Content-Disposition"] = "attachment; filename=\"test_{}_{}.txt\"".format(pk, test.created_at.strftime("%d_%b_%y"))
+
+    return response
