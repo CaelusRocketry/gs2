@@ -30,8 +30,9 @@ class Controller:
         )
 
     def create_test(self):
-        current_test = Test.objects.create()
-        current_test.save()
+        current_test = Test.objects.create(
+            environment=self.config['environment']
+        )
         return current_test
 
 

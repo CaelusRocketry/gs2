@@ -2,7 +2,14 @@ from django.db import models
 
 
 class Test(models.Model):
+    ENVIRONMENTS = [
+        ("xbee", "XBee"),
+        ("sim", "Simulation")
+    ]
+    
     created_at = models.DateTimeField(auto_now_add=True)
+    completed = models.BooleanField(default=False)
+    environment = models.CharField(max_length=24, choices=ENVIRONMENTS)
 
     def __str__(self):
         return "Test ran on {}".format(self.created_at)
