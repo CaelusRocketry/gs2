@@ -18,4 +18,10 @@ $(function() {
                 })
             });
     })
+
+    $(".export-btn").on("click", function() {
+        // since disabled prop isn't supported for a tags
+        if ($(this).attr("disabled")) 
+            return false;
+    })
 });

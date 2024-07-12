@@ -31,6 +31,49 @@
     margin-right: 2em;
 }
 
+.test-title {
+    display: flex;
+    flex-direction: column;
+    gap: .5em;
+}
+
+.test-title h3 {
+    display: inline;
+}
+
+.test-tag {
+    font-size: 12px;
+    font-family: "Segoe UI", sans-serif;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: .25em .75em;
+    cursor: pointer;
+}
+
+.test-status-in-progress {
+    border: 1px solid #ebe834; 
+    background-color: #fff789a8;
+    color: #7e7715;
+}
+
+.test-status-completed {
+    border: 1px solid #31ee40;
+    background-color: #89fd8f9a;
+    color: #217716;
+}
+
+.test-env-xbee {
+    border: 1px solid #eb3a3a;
+    background-color: #fd7e7e9a;
+    color: #751616;
+}
+
+.test-env-sim {
+    border: 1px solid #3ac8eb;
+    background-color: #7ef4fd9a;
+    color: #166f75;
+}
+
 .test-attribs span {
     display: block;
     text-align: end;
@@ -59,11 +102,11 @@
     margin-right: .5rem;
 }
 
-.action-btn:disabled {
+.action-btn[disabled] {
     cursor: not-allowed;
 }
 
-.action-btn:hover {
+.action-btn:not([disabled]):hover {
     transform: scale(1.04);
 }
 
@@ -71,11 +114,11 @@
     background-color: var(--red);
 }
 
-.delete-btn:hover {
+.delete-btn:not([disabled]):hover {
     background-color: var(--red-dark);
 }
 
-.delete-btn:active {
+.delete-btn:not([disabled]):active {
     background-color: var(--red-darker);
 }
 
@@ -83,24 +126,12 @@
     background-color: var(--green);
 }
 
-.export-btn:hover {
+.export-btn:not([disabled]):hover {
     background-color: var(--green-dark);
 }
 
-.export-btn:active {
+.export-btn:not([disabled]):active {
     background-color: var(--green-darker);
-}
-
-.replay-btn {
-    background-color: var(--gray);
-}
-
-.replay-btn:hover {
-    background-color: var(--gray-dark);
-}
-
-.replay-btn:active {
-    background-color: var(--gray-darker);
 }
 
 #no-items {
