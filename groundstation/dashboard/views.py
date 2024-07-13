@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, StreamingHttpResponse
+from django.http import HttpResponseForbidden, JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from .models import Test
@@ -25,12 +25,17 @@ def tests(request):
 @require_POST
 def delete_test(request, pk):
     test = get_object_or_404(Test, pk=pk)
+    if not test.completed:
+        return HttpResponseForbidden()
     test.delete()    
     return JsonResponse({"success": True})
 
 def export_test(request, pk):
     test = get_object_or_404(Test, pk=pk)
-
+    
+    if not test.completed:
+        return HttpResponseForbidden()
+    
     def stream():
         yield "Caelus Rocketry Ground Software\n"
         yield f"Test #{pk}, ran on {test.created_at}\n---\n"
