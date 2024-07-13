@@ -1,6 +1,5 @@
 import socket
-import random
-from time import sleep
+from time import sleep, time
 
 from digi.xbee.devices import XBeeDevice
 from digi.xbee.models.message import XBeeMessage
@@ -46,6 +45,8 @@ class SimulationController(Controller):
         self.port = self.config["telemetry"]["sim"]["port"]
         self.bufsize = self.config["telemetry"]["sim"]["bufsize"]
         self.delay = self.config["telemetry"]["sim"]["delay"]
+        self.timeout = self.config["telemetry"]["sim"]["timeout"]
+        self.max_retries = self.config["telemetry"]["sim"]["max_retries"]
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -53,24 +54,68 @@ class SimulationController(Controller):
         self.socket.bind((self.host, self.port))
 
     def listen(self) -> None: 
-        self.socket.listen(1)
-        self.fs, _ = self.socket.accept()  # addr doesn't matter
+        listening = False
+        first_time_listen = True
         
-        self.listening = True
-
-        while self.listening:
-            data: str = self.fs.recv(self.bufsize).decode()
+        while True:
+            if not first_time_listen:
+                self.socket.settimeout(self.timeout)
+                retry_count = 0
+                while retry_count < self.max_retries:
+                    try:
+                        self.socket.listen(1)
+                        self.fs, _ = self.socket.accept()
+                        break
+                    except socket.timeout:
+                        retry_count += 1
+                if retry_count >= self.max_retries:
+                    break
+            else:
+                self.socket.listen(1)
+                self.fs, _ = self.socket.accept()  # addr doesn't matter
+                self.socket.settimeout(self.timeout)
             
-            if not self.current_test:
-                self.current_test = self.create_test()
-            self.store_packet(data, self.current_test)
+            first_time_listen = False
+            listening = True
+            retry_count = 0
 
-            async_to_sync(self.channel_layer.group_send)("ground-station", {
-                "type": "flight.data",
-                "data": data
-            })
+            while listening:
+                try:
+                    data: str = self.fs.recv(self.bufsize).decode()
+                    
+                    if len(data) == 0:
+                        # client disconnected
+                        listening = False
+                        break
+
+                    if not self.current_test:
+                        self.current_test = self.create_test()
+                    self.store_packet(data, self.current_test)
+
+                    async_to_sync(self.channel_layer.group_send)("ground-station", {
+                        "type": "flight.data",
+                        "data": data
+                    })
+                except socket.timeout:
+                    if retry_count < self.max_retries:
+                        retry_count += 1
+                    else:
+                        listening = False
+                except socket.error:
+                    listening = False
+
+                sleep(self.delay)
             
+            self.fs.close()
+            # don't try retrying again 
+            if retry_count >= self.max_retries:
+                break
             sleep(self.delay)
+        
+        if self.current_test:
+            self.current_test.completed = True
+            self.current_test.save()
+            self.current_test = None
 
 class XBeeController(Controller):
     def __init__(self, config: dict):
@@ -81,19 +126,24 @@ class XBeeController(Controller):
         self.baud = self.config["telemetry"]["xbee"]["baudrate"]
         self.port = self.config["telemetry"]["xbee"]["port"]
         self.delay = self.config["telemetry"]["xbee"]["delay"]
-        
+        self.timeout = self.config["telemetry"]["xbee"]["timeout"]
+        self.max_retries = self.config["telemetry"]["xbee"]["max_retries"]
+
         self.xbee = XBeeDevice(self.port, self.baud)
 
     def listen(self) -> None:
         self.xbee.open(force_settings=True)
         
-        self.listening = True
+        retry_count = 0
+        last_message_time = None
+        listening = True
 
-        while self.listening:
-            msg: XBeeMessage = self.xbee.read_data()
+        while listening:
+            msg: XBeeMessage | None = self.xbee.read_data()
 
             if msg is not None:
                 data = msg.data.decode()
+                last_message_time = time()
 
                 if not self.current_test:
                     self.current_test = self.create_test()
@@ -103,5 +153,17 @@ class XBeeController(Controller):
                     "type": "flight.data",
                     "data": data
                 })
-            
+            elif time() - last_message_time >= self.timeout and retry_count < self.max_retries:
+                retry_count += 1
+                last_message_time = time()
+            else:
+                listening = False
+                if self.current_test:
+                    self.current_test.completed = True
+                    self.current_test.save()
+                    self.current_test = None
+
             sleep(self.delay)
+        
+        if self.xbee.is_open():
+            self.xbee.close()
