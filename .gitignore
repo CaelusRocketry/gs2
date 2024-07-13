@@ -108,13 +108,6 @@ venv.bak/
 .vscode/
 .idea/
 
-# Other files
-private.pem
-black_box.txt
-incoming.txt
-node_modules/
+# project
 
-server/blackbox.txt
-server/black_box.txt
-server/config.json
-client/config.json
+groundstation/config.json

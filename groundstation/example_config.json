@@ -1,17 +1,21 @@
 {
-    "environment": "sim",
+    "environment": "xbee",
     "telemetry": {
         "sim": {
             "host": "127.0.0.1",
             "port": 5005,
             "bufsize": 4096,
-            "delay": 0.1,
+            "delay": 0.01,
+            "timeout": 10,
+            "max_retries": 3,
             "store": "parsed"
         },
         "xbee": {
             "port": "COM5",
             "baudrate": 9600,
-            "delay": 0.1,
+            "delay": 0.01,
+            "timeout": 30,
+            "max_retries": 3,
             "store": "parsed"
         }
     }
