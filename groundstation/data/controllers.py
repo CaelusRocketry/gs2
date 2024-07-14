@@ -153,7 +153,7 @@ class XBeeController(Controller):
                     "type": "flight.data",
                     "data": data
                 })
-            elif time() - last_message_time >= self.timeout and retry_count < self.max_retries:
+            elif last_message_time is not None and time() - last_message_time >= self.timeout and retry_count < self.max_retries:
                 retry_count += 1
                 last_message_time = time()
             else:
