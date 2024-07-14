@@ -111,3 +111,4 @@ venv.bak/
 # project
 
 groundstation/config.json
+staticfiles/
