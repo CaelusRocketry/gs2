@@ -1,4 +1,4 @@
-let pidBlocks = {
+let pid_blocks = {
     "PT-1": null,
     "PT-2": null,
     "PT-3": null,
@@ -9,7 +9,7 @@ let pidBlocks = {
     "LC-3": null,
 };
 
-let sidebarBlocks = {
+let sidebar_blocks = {
     "PT-1": null,
     "PT-2": null,
     "PT-3": null,
@@ -20,7 +20,7 @@ let sidebarBlocks = {
     "LC-3": null,
 };
 
-function pidInit() {
+function pid_init() {
     let blocks = $("object.pid").contents().find("div > div > div");
     
     blocks.each(function() {
@@ -34,15 +34,15 @@ function pidInit() {
     });
 }
 
-function sidebarInit() {
+function sidebar_init() {
     $(".data-value").each(function() {
         let id = this.id;
         sidebarBlocks[id] = this;
     });
 }
 
-function updateData(id, value) {
-    if (pidBlocks[id] == null || sidebarBlocks[id] == null) return;
+function update_data(id, value) {
+    if (pid_blocks[id] == null || sidebar_blocks[id] == null) return;
 
     let unit = "PSI";
     if (id.startsWith("LC"))
@@ -50,12 +50,12 @@ function updateData(id, value) {
     else if (id.startsWith("TC"))
         unit = "°F";
 
-    $([pidBlocks[id], sidebarBlocks[id]]).text(`${value} ${unit}`);
+    $([pid_blocks[id], sidebar_blocks[id]]).text(`${value} ${unit}`);
 }
 
 $(window).on("load", function() {
-    pidInit();
-    sidebarInit();
+    pid_init();
+    sidebar_init();
 
     let socket = new WebSocket(`ws://${window.location.host}/data/`);
 
@@ -69,7 +69,7 @@ $(window).on("load", function() {
             case "sensor_data":
                 for (const sensor_type of ["pressure", "load", "thermocouple"]) {
                     $.each(payload[sensor_type], function(id, value) {
-                        updateData(id, value);
+                        update_data(id, value);
                     });
                 } 
                 break;
