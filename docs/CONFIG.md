@@ -5,26 +5,26 @@ All configuration that affects the Ground Station is located at `groundstation/c
 ## Structure
 
 The configuration is a JSON file structured as
-```json
+```js
 {
-    "environment": "'xbee' | 'sim'",
+    "environment": "xbee" | "sim",
     "telemetry": {
         "sim": {
-            "host": "IPv4",
-            "port": "number",
-            "bufsize": "number",
-            "delay": "float",
-            "timeout": "number",
-            "max_retries": "number",
-            "store": "'parsed' | 'packed'"
+            "host": IPv4,
+            "port": number,
+            "bufsize": number,
+            "delay": float,
+            "timeout": number,
+            "max_retries": number,
+            "store": "parsed" | "packed"
         },
         "xbee": {
-            "port": "`COM${number}` | `/dev/ttyUSB${number}`",
-            "baudrate": "number",
-            "delay": "float",
-            "timeout": "number",
-            "max_retries": "number",
-            "store": "'parsed' | 'packed'"
+            "port": `COM${number}` | `/dev/ttyUSB${number}`,
+            "baudrate": number,
+            "delay": float,
+            "timeout": number,
+            "max_retries": number,
+            "store": "parsed" | "packed"
         }
     }
 }
@@ -76,6 +76,3 @@ This specifies the number of connection attempts the Ground Station will make to
 ### Store
 
 This is determines whether the Ground Station will store the incoming packets as-is or as parsed JSON data.
-
-
-
