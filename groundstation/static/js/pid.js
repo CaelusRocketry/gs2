@@ -28,7 +28,7 @@ function pid_init() {
     
         if (text.startsWith("DATA")) {
             let id = text.substring(5);
-            pidBlocks[id] = this;
+            pid_blocks[id] = this;
             $(this).css("font-size", "18px");
         }
     });
@@ -37,7 +37,7 @@ function pid_init() {
 function sidebar_init() {
     $(".data-value").each(function() {
         let id = this.id;
-        sidebarBlocks[id] = this;
+        sidebar_blocks[id] = this;
     });
 }
 
