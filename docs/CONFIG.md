@@ -7,24 +7,24 @@ All configuration that affects the Ground Station is located at `groundstation/c
 The configuration is a JSON file structured as
 ```json
 {
-    "environment": "xbee" | "sim",
+    "environment": "'xbee' | 'sim'",
     "telemetry": {
         "sim": {
-            "host": IPv4,
-            "port": number,
-            "bufsize": number,
-            "delay": float,
-            "timeout": number,
-            "max_retries": number,
-            "store": "parsed" | "packed"
+            "host": "IPv4",
+            "port": "number",
+            "bufsize": "number",
+            "delay": "float",
+            "timeout": "number",
+            "max_retries": "number",
+            "store": "'parsed' | 'packed'"
         },
         "xbee": {
-            "port": `COM${number}` | `/dev/ttyUSB${number}`,
-            "baudrate": number,
-            "delay": float,
-            "timeout": number,
-            "max_retries": number,
-            "store": "parsed" | "packed"
+            "port": "`COM${number}` | `/dev/ttyUSB${number}`",
+            "baudrate": "number",
+            "delay": "float",
+            "timeout": "number",
+            "max_retries": "number",
+            "store": "'parsed' | 'packed'"
         }
     }
 }
