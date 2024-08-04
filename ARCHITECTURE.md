@@ -1,3 +1,0 @@
-# Architecture
-
-Under construction :warning:
