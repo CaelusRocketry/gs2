@@ -62,6 +62,8 @@ class Packet:
         name_mapping: dict = {
             'SEN': "sensor_data",
             'VAL': "valve_data",
+            # conform with old simulation software
+            'INF': "info"
         }
 
         return name_mapping[self.header]
