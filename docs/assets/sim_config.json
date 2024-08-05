@@ -1,0 +1,333 @@
+{
+    "telemetry": {
+      "GS_IP": "127.0.0.1",
+      "GS_PORT": 5005,
+      "DELAY": 0.1,
+      "SOCKETIO_HOST": "127.0.0.1",
+      "SOCKETIO_PORT": 5000,
+      "XBEE_RX_PIN": 3, 
+      "XBEE_TX_PIN": 4, 
+      "XBEE_BAUD_RATE": 9600,
+      "PACKET_DELIMITER": "|"
+    },
+    "sensors": {
+        "list": {
+            "thermocouple": {
+              "TC-1": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "thermo_pins": [33, 0, 1, 32]     
+              }
+            },
+            "pressure": {
+              "PT-1": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "pressure_pin": 23,
+                "bias": 34.5,
+                "slope": 0.909
+              },
+              "PT-2": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "pressure_pin": 19,
+                "bias": 22.113,
+                "slope": 1.053
+              },
+              "PT-3": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "pressure_pin": 20,
+                "bias": 30.1,
+                "slope": 1.075
+              },
+              "PT-4": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "pressure_pin": 18,
+                "bias": 24.0,
+                "slope": 1.0
+              }
+            },
+            "load_cell": {
+              "LC-1": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "load_cell_pins": [0, 1, 2, 3],
+                "bias": 1.0,
+                "slope": 1.0
+              },
+              "LC-2": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "load_cell_pins": [4, 5, 6, 7],
+                "bias": 1.0,
+                "slope": 1.0
+              },
+              "LC-3": {
+                "kalman_args": {
+                  "process_variance": 0.01,
+                  "measurement_variance": 0.02,
+                  "kalman_value": 1000
+                },
+                "boundaries": {
+                  "waiting": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "pressurization": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "autosequence": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  },
+                  "postburn": {
+                    "safe": [100, 500],
+                    "warn": [50, 550]
+                  }
+                },
+                "load_cell_pins": [8, 9, 10, 11],
+                "bias": 1.0,
+                "slope": 1.0
+              }
+            }
+        },
+        "address": "/dev/ttyACM0",
+        "baud": 115200,
+        "send_interval": 0.5
+    },
+    "valves": {
+      "list": {
+        "solenoid": {
+          "ethanol_ground_vent": {
+            "label": "NCSV-1",
+            "pin": 4,
+            "natural": "CLOSED"
+          },
+          "nitrous_vent": {
+            "label": "NCSV-2",
+            "pin": 5,
+            "natural": "CLOSED"
+          },
+          "ethanol_pressurization": {
+            "label": "NCSV-3",
+            "pin": 6,
+            "natural": "CLOSED"
+          },
+          "nitrous_pressurization": {
+            "label": "NCSV-4",
+            "pin": 7,
+            "natural": "CLOSED"
+          },
+          "ethanol_flight_vent": {
+            "label": "NCSV-5",
+            "pin": 8,
+            "natural": "CLOSED"
+          },
+          "nitrous_flight_vent": {
+              "label": "NCSV-6",
+              "pin": 9,
+              "natural": "CLOSED"
+          },
+          "ethanol_drain": {
+              "label": "NCSV-7",
+              "pin": 10,
+              "natural": "OPEN"
+          },
+          "nitrous_drain": {
+              "label": "NCSV-8",
+              "pin": 11,
+              "natural": "CLOSED"
+          },
+          "ethanol_mpv": {
+            "label": "NCSV-9",
+            "pin": 12,
+            "natural": "CLOSED"
+          },
+          "nitrous_mpv": {
+            "label": "NCSV-A",
+            "pin": 13,
+            "natural": "CLOSED"
+          },
+          "nitrous_isolation": {
+            "label": "NCSV-B",
+            "pin": 14,
+            "natural": "CLOSED"
+          }
+        }
+      },
+      "address": "/dev/ttyACM1",
+      "baud": 115200,
+      "send_interval": 0.5
+    },
+    "stages": {
+      "list": ["waiting", "pressurization", "autosequence", "postburn"],
+      "request_interval": 10,
+      "send_interval": 2
+    },
+    "timer": {
+      "delay": 0.1
+    },
+    "pressure_control": {
+      "active_stages": ["pressurization", "autosequence", "postburn"]
+    },
+    "arduino_type": "real",
+    "task_config": {
+      "tasks": ["sensor", "valve", "telemetry"],
+      "control_tasks": ["sensor", "valve"]
+    },
+    "UI": {
+        "data_cutoff": 30,
+        "message_cutoff": 10
+    },
+    "Authorized_IPs": ["localhost"]
+}
