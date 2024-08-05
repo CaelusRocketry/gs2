@@ -219,6 +219,8 @@ Load cells aren't supported by the old flight software by default, so you have t
 
 ### Sensor & Valve Type Mappings
 
+Like the Ground Station, the flight software keeps its own internal mappings of sensors and valves. Since we have altered the list of valves and sensors, we must modify these mappings accordingly.
+
 #### SensorControl.hpp
 
 ```diff
