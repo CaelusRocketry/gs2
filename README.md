@@ -14,6 +14,10 @@ All documentation is within the `docs/` folder in Markdown format. This includes
 
 Flight software documentation should be in its corresponding repository, but information on how to run the flight software simulation with this ground station can be found [here](/docs/SIMULATION.md). 
 
+## Contributing
+
+If you are part of the Caelus Rocketry organization and would like to contribute to this project, please review the [project roadmap](https://github.com/orgs/CaelusRocketry/projects/1) beforehand in case of any conflicts.
+
 ## Licensing
 
 This code is licensed under the [MIT License](/LICENSE).

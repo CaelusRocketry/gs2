@@ -2,6 +2,27 @@
 
 The Ground Station is composed of different technologies all working together in a cohesive manner. This document attempts to outline these technologies.
 
+## File Structure
+
+- `groundstation/`
+  - `dashboard/`
+    - `consumers.py` - contains the WebSocket that the frontend connects to
+    - `models.py` - contains Packet models for storing tests in the database
+    - `urls.py` - contains url mappings for dashboard routes
+    - `views.py` - contains route callbacks
+  - `data/`
+    - `bridge.py` - manager for flight software (FS) controllers; initializes controllers and starts threads
+    - `controllers.py` - contains the FS controllers; connects & listens to their respective communication interfaces
+    - `packet.py` - parses and unpacks packets sent by the flight software
+  - `static/`
+    - `css/` - css-related files 
+    - `img/` - logos, P&IDs
+    - `js/` - JavaScript frontend files
+  - `asgi.py` - creates ASGI app; initializes WebSockets with Channels
+  - `settings.py` - Django related settings
+  - `example_config.json/config.json` - Ground Station related settings
+  - `urls.py` - contains url mappings for entire project
+
 ## Technologies 
 
 ### Django
