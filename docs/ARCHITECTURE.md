@@ -2,7 +2,7 @@
 
 The Ground Station is composed of different technologies all working together in a cohesive manner. This document attempts to outline these technologies.
 
-## File Structure
+## Project Structure
 
 - `groundstation/`
   - `dashboard/`
