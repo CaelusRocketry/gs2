@@ -11,25 +11,25 @@
             </ul>
         </div>
     {% endif %}
-    {% if sensors.load %}
-        <div id="load-data">
-            <h1>Load</h1>
-            <ul>
-                {% for lc in sensors.load %}
-                    <li><span class="data-identifier">{{ lc }}</span> <span class="data-value" id="{{ lc }}">? N</span></li>
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
     {% if sensors.thermocouple %}
     <div id="thermo-data">
-        <h1>Thermocouple</h1>
+        <h1>Temperature</h1>
         <ul>
             {% for tc in sensors.thermocouple %}
                 <li><span class="data-identifier">{{ tc }}</span> <span class="data-value" id="{{ tc }}">? °F</span></li>
             {% endfor %}
         </ul>
     </div>
+    {% endif %}
+    {% if sensors.load %}
+        <div id="load-data">
+            <h1>Thrust</h1>
+            <ul>
+                {% for lc in sensors.load %}
+                    <li><span class="data-identifier">{{ lc }}</span> <span class="data-value" id="{{ lc }}">? N</span></li>
+                {% endfor %}
+            </ul>
+        </div>
     {% endif %}
     {% if not sensors.thermocouple and not sensors.pressure and not sensors.load %} 
         <h1 style="text-align: center;">No data</h1>
