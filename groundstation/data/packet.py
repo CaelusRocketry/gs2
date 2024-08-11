@@ -110,7 +110,7 @@ class Packet:
             "B": "SV-11",  # nitrous_isolation
         }
 
-        return (type_mapping[valve[0]], location_mapping[valve[1]])
+        return type_mapping[valve[0]], location_mapping[valve[1]]
 
     def __str__(self):
         return f"{self.PACKET_START}{self.header}{self.PACKET_DELIMITER}{self.timestamp}{self.PACKET_DELIMITER}{self.data}{self.PACKET_END}"
