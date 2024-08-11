@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseForbidden, JsonResponse, StreamingHttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -36,11 +37,12 @@ def export_test(request, pk):
     if not test.completed:
         return HttpResponseForbidden()
     
+
     def stream():
         yield "Caelus Rocketry Ground Software\n"
         yield f"Test #{pk}, ran on {test.created_at}\n---\n"
         for packet in test.packets.all():
-            yield f"{packet.values}\n"
+            yield f"{test.created_at + timedelta(seconds=packet.timestamp)} ({packet.timestamp}): {packet.values}\n"
 
     response = StreamingHttpResponse(stream(), content_type="text/plain")
     response["Content-Disposition"] = "attachment; filename=\"test_{}_{}.txt\"".format(pk, test.created_at.strftime("%d_%b_%y"))
