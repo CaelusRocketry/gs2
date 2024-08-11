@@ -1,5 +1,8 @@
 # Simulation
 
+> [!IMPORTANT] 
+> The following information is in reference to the old flight software before commit [38dbe3914cbb9e5197c8515ba5a78227b85d0f54](https://github.com/CaelusRocketry/full-flight-software/commit/38dbe3914cbb9e5197c8515ba5a78227b85d0f54). If you have updated the flight software or cloned it after the aforementioned commit, then the flight software is already gs2-compatible and you do not need to modify it.
+
 To test the Ground Station, you can run a simulation of the flight software by editing your environment to be `sim`. The simulation software can be found in the old flight software repository [here](https://github.com/CaelusRocketry/full-flight-software).
 
 However, in its initial state, the simulation is incompatible with the Ground Station. Please review the instructions below to properly configure the flight software to run the simulation.
