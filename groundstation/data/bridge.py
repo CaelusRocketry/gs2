@@ -1,7 +1,7 @@
 from threading import Thread
 
 from groundstation import settings
-from .controllers import Controller, XBeeController, SimulationController
+from .controllers import Controller, XBeeController, SimulationController, BluetoothController
 
 class FSBridge():    
     def __init__(self):
@@ -12,6 +12,8 @@ class FSBridge():
             self.controller = XBeeController(self.config)
         elif self.config['environment'] == 'sim':
             self.controller = SimulationController(self.config) 
+        elif self.config['environment'] == 'bt':
+            self.controller = BluetoothController(self.config)
 
         self.startup()    
 

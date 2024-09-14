@@ -1,4 +1,5 @@
 import socket
+import bluetooth
 from time import sleep, time
 
 from digi.xbee.devices import XBeeDevice
@@ -33,7 +34,6 @@ class Controller:
             environment=self.config['environment']
         )
         return current_test
-
 
 class SimulationController(Controller):
     def __init__(self, config: dict):
@@ -167,3 +167,91 @@ class XBeeController(Controller):
         
         if self.xbee.is_open():
             self.xbee.close()
+
+class BluetoothController(Controller):
+    def __init__(self, config: dict):
+        super().__init__(config)
+        
+        self.current_test = None
+        self.channel_layer = get_channel_layer()
+        self.device_name = self.config["telemetry"]["bt"]["name"]
+        self.port = self.config["telemetry"]["bt"]["port"]
+        self.bufsize = self.config["telemetry"]["bt"]["bufsize"]
+        self.delay = self.config["telemetry"]["bt"]["delay"]
+        self.timeout = self.config["telemetry"]["bt"]["timeout"]
+        self.max_retries = self.config["telemetry"]["bt"]["max_retries"]
+
+        self.host = self.find_bt_device()
+
+        self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+
+    def find_bt_device(self):
+        nearby_devices = bluetooth.discover_devices(lookup_names=True)
+
+        for addr, name in nearby_devices:
+            if name == self.device_name:
+                return addr
+
+        return None
+    
+    def listen(self) -> None:
+        listening = False
+        first_time_listen = True
+        
+        while True:
+            if not first_time_listen:
+                self.socket.settimeout(self.timeout)
+                retry_count = 0
+                while retry_count < self.max_retries:
+                    try:
+                        self.socket.connect((self.host, self.port))
+                        break
+                    except bluetooth.BluetoothError as e:
+                        retry_count += 1
+                        sleep(self.delay)
+                if retry_count >= self.max_retries:
+                    break
+            else:
+                self.socket.connect((self.host, self.port))
+                self.socket.settimeout(self.timeout)
+            
+            first_time_listen = False
+            listening = True
+            retry_count = 0
+
+            while listening:
+                try:
+                    data: str = self.socket.recv(self.bufsize).decode()
+
+                    if len(data) == 0:
+                        # device disconnected
+                        listening = False
+                        break
+
+                    if not self.current_test:
+                        self.current_test = self.create_test()
+                    self.store_packet(data, self.current_test)
+
+                    async_to_sync(self.channel_layer.group_send)("ground-station", {
+                        "type": "flight.data",
+                        "data": data
+                    })
+                except bluetooth.BluetoothError:
+                    if retry_count < self.max_retries:
+                        retry_count += 1
+                    else:
+                        listening = False
+                except Exception:
+                    listening = False
+
+                sleep(self.delay)
+            
+            self.socket.close()
+            if retry_count >= self.max_retries:
+                break
+            sleep(self.delay)
+        
+        if self.current_test:
+            self.current_test.completed = True
+            self.current_test.save()
+            self.current_test = None
