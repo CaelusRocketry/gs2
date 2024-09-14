@@ -26,3 +26,5 @@ typing_extensions==4.12.2
 tzdata==2024.1
 whitenoise==6.7.0
 zope.interface==6.4.post2
+
+# To install PyBluez, run `pip install git+https://github.com/pybluez/pybluez.git#egg=pybluez`
