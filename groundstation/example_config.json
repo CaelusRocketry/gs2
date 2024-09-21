@@ -19,7 +19,7 @@
             "store": "parsed"
         },
         "bt": {
-            "name": "127.0.0.1",
+            "name": "SensorPCB",
             "port": 5005,
             "bufsize": 4096,
             "delay": 0.01,
