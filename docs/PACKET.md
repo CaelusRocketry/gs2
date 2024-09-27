@@ -28,7 +28,7 @@ The `SEN` packet is used to send sensor-related data. The data is in the format 
 
 ### VAL
 
-The `END` packet is used to send valve-related data. The data is in the format of `<valve_type><valve_location><state>`. The valve type is always 0, which maps to solenoid. The valve location is a number in base 16 between 1 and B and maps to SV-1, ..., SV-11. The valve state is a number that represents the current state of the valve.
+The `VAL` packet is used to send valve-related data. The data is in the format of `<valve_type><valve_location><state>`. The valve type is always 0, which maps to solenoid. The valve location is a number in base 16 between 1 and B and maps to SV-1, ..., SV-11. The valve state is a number that represents the current state of the valve.
 - **Note:** Valve data is currently not read, so this packet will not be encountered.
 
 ### END

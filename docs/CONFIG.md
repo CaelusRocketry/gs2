@@ -7,7 +7,7 @@ All configuration that affects the Ground Station is located at `groundstation/c
 The configuration is a JSON file structured as
 ```js
 {
-    "environment": "xbee" | "sim",
+    "environment": "xbee" | "sim" | "bt",
     "telemetry": {
         "sim": {
             "host": IPv4,
@@ -25,6 +25,15 @@ The configuration is a JSON file structured as
             "timeout": number,
             "max_retries": number,
             "store": "parsed" | "packed"
+        },
+        "bt":  {
+            "name": string,
+            "port": number,
+            "bufsize": number,
+            "delay": float,
+            "timeout": number,
+            "max_retries": number,
+            "store": "parsed" | "packed"
         }
     }
 }
@@ -32,7 +41,7 @@ The configuration is a JSON file structured as
 
 ### Environment
 
-This property determines whether the Ground Station will interface with a flight software simulation or an XBee socket. Use `"sim"` for the simulation environment and `"xbee"` for the XBee environment.
+This property determines whether the Ground Station will interface with a flight software simulation, an XBee socket, or a Bluetooth socket. Use `"sim"` for the simulation environment, `"xbee"` for the XBee environment, and `"bt"` for the Bluetooth environment.
 
 ### Telemetry
 
@@ -41,7 +50,12 @@ This is a container that supports additional configuration for both environments
 ### Host
 
 This is a web address for the socket which is almost always `127.0.0.1` or `localhost`.
-- **Note:** This option does not exist in XBee configuration.
+- **Note:** This option does not exist in XBee or Bluetooth configuration.
+
+### Name
+
+This is the name of the Bluetooth Serial created in the flight software. A name like `SensorPCB` will most likely be used. 
+- **Note:** This only exists on the Bluetooth configuration.
 
 ### Port 
 
@@ -57,7 +71,7 @@ On Linux, this port will be in the form `/dev/ttyUSB<number>`, such as `/dev/tty
 
 ### Bufsize / Baudrate
 
-For the simulation environment, this option is called **`bufsize`** and it determines the size of the buffer that Python will send to the socket to input bytes in. In other words, this determines how much data can be received. 
+For the simulation & bluetooth environment, this option is called **`bufsize`** and it determines the size of the buffer that Python will send to the socket to input bytes in. In other words, this determines how much data can be received. 
 
 For the XBee environment, this option is called **`baudrate`** and it is a measure of the speed at which the data is transmitted from the XBee device. It is measured in bps (bits per second) and is usually `9600`.
 
