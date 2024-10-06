@@ -1,5 +1,7 @@
 import socket
 import bluetooth
+import traceback
+
 from time import sleep, time
 
 from digi.xbee.devices import XBeeDevice
@@ -171,35 +173,52 @@ class XBeeController(Controller):
 class BluetoothController(Controller):
     def __init__(self, config: dict):
         super().__init__(config)
-        
+
         self.current_test = None
         self.channel_layer = get_channel_layer()
         self.device_name = self.config["telemetry"]["bt"]["name"]
-        self.port = self.config["telemetry"]["bt"]["port"]
         self.bufsize = self.config["telemetry"]["bt"]["bufsize"]
         self.delay = self.config["telemetry"]["bt"]["delay"]
         self.timeout = self.config["telemetry"]["bt"]["timeout"]
         self.max_retries = self.config["telemetry"]["bt"]["max_retries"]
 
-        self.host = self.find_bt_device()
+        self.host = None
+        self.port = None
 
         self.socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 
     def find_bt_device(self):
+        print("\nSearching for Bluetooth devices...")
         nearby_devices = bluetooth.discover_devices(lookup_names=True)
 
         for addr, name in nearby_devices:
+            print(addr, name)
             if name == self.device_name:
-                return addr
+                print(f"Found device {name} with address {addr}")
+                self.host = addr
+                break
 
-        return None
-    
+        if self.host is None:
+            print(f"Could not find device with name {self.device_name}.")
+            return
+
+        service = bluetooth.find_service(address=self.host)[0]
+        self.port = service["port"]
+
+        print(f"Using {service["name"]} at {service["host"]} on port {service["port"]}.")
+
+
     def listen(self) -> None:
         listening = False
         first_time_listen = True
-        
+
         while True:
+            while self.port is None:
+                self.find_bt_device()
+                sleep(1)
+
             if not first_time_listen:
+                print("Retrying connection...")
                 self.socket.settimeout(self.timeout)
                 retry_count = 0
                 while retry_count < self.max_retries:
@@ -207,6 +226,7 @@ class BluetoothController(Controller):
                         self.socket.connect((self.host, self.port))
                         break
                     except bluetooth.BluetoothError as e:
+                        print(traceback.format_exc())
                         retry_count += 1
                         sleep(self.delay)
                 if retry_count >= self.max_retries:
@@ -214,7 +234,7 @@ class BluetoothController(Controller):
             else:
                 self.socket.connect((self.host, self.port))
                 self.socket.settimeout(self.timeout)
-            
+
             first_time_listen = False
             listening = True
             retry_count = 0
@@ -222,7 +242,7 @@ class BluetoothController(Controller):
             while listening:
                 try:
                     data: str = self.socket.recv(self.bufsize).decode()
-
+                    # print(data, end="", flush=True)
                     if len(data) == 0:
                         # device disconnected
                         listening = False
@@ -237,20 +257,24 @@ class BluetoothController(Controller):
                         "data": data
                     })
                 except bluetooth.BluetoothError:
+                    print(traceback.format_exc())
                     if retry_count < self.max_retries:
                         retry_count += 1
                     else:
                         listening = False
                 except Exception:
+                    print(traceback.format_exc())
                     listening = False
 
                 sleep(self.delay)
             
+            print("\nDevice disconnected.")
+
             self.socket.close()
             if retry_count >= self.max_retries:
                 break
             sleep(self.delay)
-        
+
         if self.current_test:
             self.current_test.completed = True
             self.current_test.save()
