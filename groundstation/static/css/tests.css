@@ -74,6 +74,12 @@
     color: #166f75;
 }
 
+.test-env-bt {
+    border: 1px solid #4d55df;
+    background-color: #545ce77c;
+    color: #0b0e41;
+}
+
 .test-attribs span {
     display: block;
     text-align: end;

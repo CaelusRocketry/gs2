@@ -28,8 +28,10 @@
                                 {% endif %}
                                 {% if test.environment == "xbee" %}
                                     <span class="test-env-xbee test-tag">{{ test.get_environment_display }}</span>
-                                {% else %}
+                                {% elif test.environment == "sim" %}
                                     <span class="test-env-sim test-tag">{{ test.get_environment_display }}</span>
+                                {% else %}
+                                    <span class="test-env-bt test-tag">{{ test.get_environment_display }}</span>
                                 {% endif %}
                             </div>
                         </div>

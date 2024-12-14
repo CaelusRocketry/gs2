@@ -4,7 +4,8 @@ from django.db import models
 class Test(models.Model):
     ENVIRONMENTS = [
         ("xbee", "XBee"),
-        ("sim", "Simulation")
+        ("sim", "Simulation"),
+        ("bt", "Bluetooth")
     ]
     
     created_at = models.DateTimeField(auto_now_add=True)

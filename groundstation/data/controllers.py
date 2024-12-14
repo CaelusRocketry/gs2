@@ -205,8 +205,7 @@ class BluetoothController(Controller):
         service = bluetooth.find_service(address=self.host)[0]
         self.port = service["port"]
 
-        print(f"Using {service["name"]} at {service["host"]} on port {service["port"]}.")
-
+        print(f"Using {service['name']} at {service['host']} on port {service['port']}.")
 
     def listen(self) -> None:
         listening = False
@@ -242,7 +241,7 @@ class BluetoothController(Controller):
             while listening:
                 try:
                     data: str = self.socket.recv(self.bufsize).decode()
-                    # print(data, end="", flush=True)
+                    
                     if len(data) == 0:
                         # device disconnected
                         listening = False
