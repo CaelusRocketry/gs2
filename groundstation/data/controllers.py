@@ -18,6 +18,9 @@ class Controller:
         
     def store_packet(self, pkt: str, current_test: Test):
         packet = Packet(pkt)
+
+        if packet.invalid:
+            return
         
         if self.config['telemetry'][self.config['environment']]['store'] == 'parsed':
             payload: dict = packet.parse()['payload']

@@ -5,13 +5,20 @@ class Packet:
 
     DATA_DELIMITER: str = ','
 
+    invalid = False
+
     def __init__(self, packed_pkt: str):
         # packed format: ^header|timestamp|data$
+        if packed_pkt[0] != Packet.PACKET_START or packed_pkt[-1] != Packet.PACKET_END or len(packed_pkt.split(Packet.PACKET_DELIMITER)) != 3:
+            self.invalid = True
+            return
+
         self.unpack(packed_pkt)
 
     def unpack(self, packed_pkt: str):
         packet = packed_pkt[1:-1]
         tokens: list[str] = packet.split(self.PACKET_DELIMITER)
+        print(tokens)
         self.header: str = tokens[0]
         self.data: str = tokens[2]
         # timestamp in this format to conform with old simulation software
@@ -38,14 +45,14 @@ class Packet:
         sensors: list[str] = self.data.split(self.DATA_DELIMITER)
 
         for sensor in sensors:
-            sensor_type, sensor_location = self.get_sensor_data(sensor)
+            sensor_type, sensor_location, sensor_callibration = self.get_sensor_data(sensor)
             value = int(sensor[2:], 16)
-            
+            # print(sensor_callibration)
             if sensor_type not in response['payload']:
                 response['payload'][sensor_type] = {}
 
-            response['payload'][sensor_type][sensor_location] = value
-
+            response['payload'][sensor_type][sensor_location] = value + sensor_callibration
+            # print(response['payload'][sensor_type][sensor_location], value)
     def parse_valves(self, response: dict):
         valves: list[str] = self.data.split(self.DATA_DELIMITER)
 
@@ -86,8 +93,16 @@ class Packet:
             '7': 'LC-2',
             '8': 'LC-3'
         }
-        
-        return (type_mapping[sensor[0]], location_mapping[sensor[1]])
+        callibration_mapping: dict = {
+            'PT-1': 3, 
+            'PT-2':10, 
+            'PT-3':0, 
+            'PT-4': -5
+        }
+        callibration = 0
+        if location_mapping[sensor[1]] in callibration_mapping:
+            callibration = callibration_mapping[location_mapping[sensor[1]]]
+        return (type_mapping[sensor[0]], location_mapping[sensor[1]], callibration)
 
     def get_valve_data(self, valve: str):
         # in case there will be more than 1 type

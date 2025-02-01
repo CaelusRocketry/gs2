@@ -15,4 +15,6 @@ class GroundConsumer(JsonWebsocketConsumer):
     
     def flight_data(self, message):
         packet = Packet(message["data"])
+        if packet.invalid:
+            return
         self.send_json(packet.parse())
