@@ -148,6 +148,15 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# Calibrated biases for sensors
+SENSOR_CALIBRATION_MAPPING = {
+    'PT-1': -3, 
+    'PT-2': 11, 
+    'PT-3': 0, 
+    'PT-4': -2
+}
+
 # load config
 
 with open(os.path.join(os.getcwd(), 'groundstation', 'config.json'), 'r') as conf:

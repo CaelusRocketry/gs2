@@ -1,3 +1,5 @@
+from django.conf import settings
+
 class Packet:
     PACKET_START: str = '^'
     PACKET_DELIMITER: str = '|'
@@ -53,6 +55,7 @@ class Packet:
 
             response['payload'][sensor_type][sensor_location] = value + sensor_callibration
             # print(response['payload'][sensor_type][sensor_location], value)
+
     def parse_valves(self, response: dict):
         valves: list[str] = self.data.split(self.DATA_DELIMITER)
 
@@ -93,16 +96,10 @@ class Packet:
             '7': 'LC-2',
             '8': 'LC-3'
         }
-        callibration_mapping: dict = {
-            'PT-1': 3, 
-            'PT-2':10, 
-            'PT-3':0, 
-            'PT-4': -5
-        }
         callibration = 0
-        if location_mapping[sensor[1]] in callibration_mapping:
-            callibration = callibration_mapping[location_mapping[sensor[1]]]
-        return (type_mapping[sensor[0]], location_mapping[sensor[1]], callibration)
+        if location_mapping[sensor[1]] in settings.SENSOR_CALIBRATION_MAPPING:
+            callibration = settings.SENSOR_CALIBRATION_MAPPING[location_mapping[sensor[1]]]
+        return type_mapping[sensor[0]], location_mapping[sensor[1]], callibration
 
     def get_valve_data(self, valve: str):
         # in case there will be more than 1 type
