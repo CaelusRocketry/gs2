@@ -79,3 +79,34 @@ $(window).on("load", function() {
         }
     }
 });
+
+document.getElementById('zero').addEventListener('click', () => { // for sensor zero button
+    values = { ...sidebar_blocks }; // makes copy of dict instead of referencing it directly
+
+    for(const key in values) // remvoes the "? PSI" from the html and makes it into an int
+    {
+        if(values[key].innerHTML == "? PSI")
+            values[key] = 0
+        else
+            values[key] = values[key].innerHTML.substring(0, values[key].innerHTML.indexOf("? PSI") != -1 ? values[key].innerHTML.indexOf("? PSI") : 1)
+
+        values[key] = parseInt(values[key])
+    }
+
+
+    $.ajax({ // sent values to backend
+        type: "GET",
+        url: '/zeroall',
+        data: {
+            "result": JSON.stringify(values),
+        },
+        dataType: "json",
+        success: function (data) {
+            // any process in data
+            alert("successfull")
+        },
+        failure: function () {
+            alert("failure");
+        }
+    });
+});

@@ -4,6 +4,9 @@ from django.http import HttpResponseForbidden, JsonResponse, StreamingHttpRespon
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
 from .models import Test
+from django.shortcuts import redirect
+from django.conf import settings
+import json
 
 def index(request):
     ctx: dict = {
@@ -48,3 +51,19 @@ def export_test(request, pk):
     response["Content-Disposition"] = "attachment; filename=\"test_{}_{}.txt\"".format(pk, test.created_at.strftime("%d_%b_%y"))
 
     return response
+
+def zeroall(request): # edits the sensor calibration directly cuz thats easier to do
+    result = request.GET.get('result', None) # gets reading
+    result = json.loads(result)
+
+    print(settings.SENSOR_CALIBRATION_MAPPING) # print old calibration values
+    
+    # assign new values based on what was sent from frontend
+    settings.SENSOR_CALIBRATION_MAPPING['PT-1'] = result['PT-1']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-2'] = result['PT-2']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-3'] = result['PT-3']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-4'] = result['PT-4']
+
+    print(settings.SENSOR_CALIBRATION_MAPPING) # print new calibration values
+
+    return redirect('index') # redirect to the index page
