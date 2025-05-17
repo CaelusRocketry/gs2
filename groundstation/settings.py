@@ -149,12 +149,21 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# # Calibrated biases for sensors
+# SENSOR_CALIBRATION_MAPPING = {
+#     'PT-1': -3, 
+#     'PT-2': 11, 
+#     'PT-3': 0, 
+#     'PT-4': -2
+# }
+
 # Calibrated biases for sensors
+# need this to be 0 so the zero sensors button doest add weird values
 SENSOR_CALIBRATION_MAPPING = {
-    'PT-1': -3, 
-    'PT-2': 11, 
+    'PT-1': 0, 
+    'PT-2': 0, 
     'PT-3': 0, 
-    'PT-4': -2
+    'PT-4': 0
 }
 
 # load config
