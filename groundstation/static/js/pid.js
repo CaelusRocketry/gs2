@@ -88,7 +88,7 @@ document.getElementById('zero').addEventListener('click', () => { // for sensor 
         if(values[key].innerHTML == "? PSI")
             values[key] = 0
         else
-            values[key] = values[key].innerHTML.substring(0, values[key].innerHTML.indexOf("? PSI") != -1 ? values[key].innerHTML.indexOf("? PSI") : 1)
+            values[key] = values[key].innerHTML.substring(0, values[key].innerHTML.indexOf("PSI") != -1 ? values[key].innerHTML.indexOf("PSI") : 1)
 
         values[key] = parseInt(values[key])
     }

@@ -59,10 +59,10 @@ def zeroall(request): # edits the sensor calibration directly cuz thats easier t
     print(settings.SENSOR_CALIBRATION_MAPPING) # print old calibration values
     
     # assign new values based on what was sent from frontend
-    settings.SENSOR_CALIBRATION_MAPPING['PT-1'] = result['PT-1']
-    settings.SENSOR_CALIBRATION_MAPPING['PT-2'] = result['PT-2']
-    settings.SENSOR_CALIBRATION_MAPPING['PT-3'] = result['PT-3']
-    settings.SENSOR_CALIBRATION_MAPPING['PT-4'] = result['PT-4']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-1'] -= result['PT-1']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-2'] -= result['PT-2']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-3'] -= result['PT-3']
+    settings.SENSOR_CALIBRATION_MAPPING['PT-4'] -= result['PT-4']
 
     print(settings.SENSOR_CALIBRATION_MAPPING) # print new calibration values
 
