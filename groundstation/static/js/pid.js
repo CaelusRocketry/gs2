@@ -142,7 +142,7 @@ document.getElementById('zero').addEventListener('click', () => {
             document.getElementById('zero').innerHTML = "Zero Sensors";
 
             document.getElementById('offsets').innerHTML = '';
-            let o = ''
+            let o = '<span>Offsets</span>';
             for (const key in offsets) {
                 if(key == 'PT-1' || 'PT-2' || 'PT-3' || 'PT-4')
                     o += `<div class='offset'><span>${key}: ${offsets[key]}</span></div>`;
