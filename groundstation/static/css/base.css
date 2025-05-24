@@ -170,3 +170,10 @@ nav>img.logo {
 .button-3:hover {
     background-color: #2c974b;
 }
+
+button-3:disabled,
+button[disabled] {
+    background-color: #278542;
+    color: #989898;
+    cursor: not-allowed;
+}

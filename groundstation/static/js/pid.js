@@ -20,12 +20,14 @@ let sidebar_blocks = {
     "LC-3": null,
 };
 
+let offsets;
+
 function pid_init() {
     let blocks = $("object.pid").contents().find("div > div > div");
-    
-    blocks.each(function() {
+
+    blocks.each(function () {
         let text = $(this).text();
-    
+
         if (text.startsWith("DATA")) {
             let id = text.substring(5);
             pid_blocks[id] = this;
@@ -35,7 +37,7 @@ function pid_init() {
 }
 
 function sidebar_init() {
-    $(".data-value").each(function() {
+    $(".data-value").each(function () {
         let id = this.id;
         sidebar_blocks[id] = this;
     });
@@ -53,7 +55,7 @@ function update_data(id, value) {
     $([pid_blocks[id], sidebar_blocks[id]]).text(`${value} ${unit}`);
 }
 
-$(window).on("load", function() {
+$(window).on("load", function () {
     pid_init();
     sidebar_init();
 
@@ -61,17 +63,17 @@ $(window).on("load", function() {
 
     socket.onmessage = (event) => {
         let data = JSON.parse(event.data);
-        
+
         let header = data.header;
         let payload = data.payload;
 
         switch (header) {
             case "sensor_data":
                 for (const sensor_type of ["pressure", "load", "thermocouple"]) {
-                    $.each(payload[sensor_type], function(id, value) {
+                    $.each(payload[sensor_type], function (id, value) {
                         update_data(id, value);
                     });
-                } 
+                }
                 break;
             case "valve_data":
                 // TODO: finish valve updating once valve data can be read
@@ -80,33 +82,70 @@ $(window).on("load", function() {
     }
 });
 
-document.getElementById('zero').addEventListener('click', () => { // for sensor zero button
-    values = { ...sidebar_blocks }; // makes copy of dict instead of referencing it directly
+function parseArr(a) {
+    let rtr = { ...a }
 
-    for(const key in values) // remvoes the "? PSI" from the html and makes it into an int
-    {
-        if(values[key].innerHTML == "? PSI")
-            values[key] = 0
+    for (const key in rtr) {
+        if (rtr[key].innerHTML == "? PSI")
+            rtr[key] = 0
         else
-            values[key] = values[key].innerHTML.substring(0, values[key].innerHTML.indexOf("PSI") != -1 ? values[key].innerHTML.indexOf("PSI") : 1)
+            rtr[key] = rtr[key].innerHTML.substring(0, rtr[key].innerHTML.indexOf("PSI") != -1 ? rtr[key].innerHTML.indexOf("PSI") : 1)
 
-        values[key] = parseInt(values[key])
+        rtr[key] = parseInt(rtr[key])
     }
 
+    return rtr
+}
 
-    $.ajax({ // sent values to backend
-        type: "GET",
-        url: '/zeroall',
-        data: {
-            "result": JSON.stringify(values),
-        },
-        dataType: "json",
-        success: function (data) {
-            // any process in data
-            alert("successfull")
-        },
-        failure: function () {
-            alert("failure");
+document.getElementById('zero').addEventListener('click', () => {
+    document.getElementById('zero').disabled = true;
+    document.getElementById('zero').innerHTML = "Collecting Data"
+
+
+    offsets = { ...sidebar_blocks };
+    offsets = parseArr(offsets);
+
+    let count = 1;
+
+    let interval = setInterval(() => {
+        count++;
+
+        let newVals = { ...sidebar_blocks };
+        newVals = parseArr(newVals);
+
+        for (const key in newVals)
+            offsets[key] += newVals[key];
+
+        if (count >= 10) {
+            for (const key in offsets)
+                offsets[key] /= count;
+
+            $.ajax({
+                type: "GET",
+                url: '/zeroall',
+                data: {
+                    "result": JSON.stringify(offsets),
+                },
+                dataType: "json",
+                success: function (data) {
+                    // alert("successfull")
+                },
+                failure: function () {
+                    // alert("failure");
+                }
+            });
+
+            document.getElementById('zero').disabled = false;
+            document.getElementById('zero').innerHTML = "Zero Sensors";
+
+            document.getElementById('offsets').innerHTML = '';
+            let o = ''
+            for (const key in offsets) {
+                o += `<div class='offset'><span>${key}: ${offsets[key]}</span></div>`;
+            }
+            document.getElementById('offsets').innerHTML = o;
+
+            clearInterval(interval);
         }
-    });
+    }, 500);
 });
