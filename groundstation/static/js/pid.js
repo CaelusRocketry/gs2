@@ -118,7 +118,10 @@ document.getElementById('zero').addEventListener('click', () => {
 
         if (count >= 10) {
             for (const key in offsets)
+            {
                 offsets[key] /= count;
+                offsets[key] = parseInt(offsets[key])
+            }
 
             $.ajax({
                 type: "GET",
@@ -141,7 +144,8 @@ document.getElementById('zero').addEventListener('click', () => {
             document.getElementById('offsets').innerHTML = '';
             let o = ''
             for (const key in offsets) {
-                o += `<div class='offset'><span>${key}: ${offsets[key]}</span></div>`;
+                if(key == 'PT-1' || 'PT-2' || 'PT-3' || 'PT-4')
+                    o += `<div class='offset'><span>${key}: ${offsets[key]}</span></div>`;
             }
             document.getElementById('offsets').innerHTML = o;
 
